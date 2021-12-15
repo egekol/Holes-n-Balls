@@ -374,7 +374,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rock: {fileID: 1497375549266368093, guid: c7859071b1a1ba74598c6f474b088360, type: 3}
   floor: {fileID: 1497375549266368093, guid: a590421316cbcc14fb9a832cbf46ca6e, type: 3}
-  _level: {fileID: 0}
+  ball: {fileID: 0}
+  hole: {fileID: 0}
+  tileList: []
 --- !u!4 &1815438418
 Transform:
   m_ObjectHideFlags: 0
