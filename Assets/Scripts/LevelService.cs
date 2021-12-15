@@ -11,13 +11,16 @@ public class LevelService : MonoBehaviour
     public GameObject ball;
 
     public GameObject hole;
-    public enum eTile
-    {
-        Rock =0 , Floor, Ball, Hole
-    }
+    public List<GameObject> tileList;
+
     // Start is called before the first frame update
     void Start()
     {
+        tileList.Add(floor);
+        tileList.Add(rock);
+        tileList.Add(ball);
+        Debug.Log(tileList);
+        
         var levelText = Resources.Load<TextAsset>("Levels/level").text;
         Debug.Log(levelText);
         var lines = levelText.Split("\n"[0]);
@@ -40,19 +43,21 @@ public class LevelService : MonoBehaviour
         {
             for (int j = 0; j < levelGrid.GetLength(1); j++)
             {
-                Debug.Log(levelGrid[i,j] + " "+i + j );
-                if (levelGrid[i,j]==(int) eTile.Rock)
+                Instantiate(tileList[levelGrid[i,j]],new Vector3(j,-i,transform.position.z),transform.rotation,transform);
+
+                /*Debug.Log(levelGrid[i,j] + " "+i + j );
+                if (levelGrid[i,j]==1)
                 {
                     Instantiate(rock,new Vector3(j,-i,transform.position.z),transform.rotation,transform);
                 }
-                else if (levelGrid[i,j] == (int) eTile.Floor)
+                else if (levelGrid[i,j] == 0)
                 {
                     Instantiate(floor,new Vector3(j,-i,transform.position.z),transform.rotation,transform);
-                    
                 }
+                else
                 {
-
-                }
+                    Instantiate(ball,new Vector3(j,-i,transform.position.z),transform.rotation,transform);
+                }*/
             }
         }
 
