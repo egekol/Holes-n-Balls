@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 436635467475358022}
   - component: {fileID: 2142430816402660719}
   - component: {fileID: 583845238891557570}
+  - component: {fileID: 6847976735893105167}
+  - component: {fileID: -3181573520475692077}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -95,3 +97,32 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6847976735893105167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497375549266368093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1cedaba22528714f987d7347c25e099, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationSpeed: 0.4
+  animationDistance: {x: 0, y: 0, z: 0}
+  animateMove: 0
+  animateScale: 0
+--- !u!114 &-3181573520475692077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497375549266368093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcd3fa00149b86f47b1258a66c95a4b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _createAnimation: {fileID: 6847976735893105167}
