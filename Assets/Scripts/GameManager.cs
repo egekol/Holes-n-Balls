@@ -112,8 +112,8 @@ public class GameManager : MonoBehaviour
                  && Instance.gameState == GameState.Playing)
         {
             Instance.gameState = GameState.Win;
-            //var stars = GetCoinResult();
-            //Debug.Log("stars: " + stars);
+            var stars = GetCoinResult();
+            Debug.Log("stars: " + stars);
         }
     }
 

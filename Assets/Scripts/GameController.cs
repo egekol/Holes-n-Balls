@@ -16,21 +16,7 @@ public class GameController : MonoBehaviour
     private int animationCount;
     public int[,] holeCoordinate;
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-        var lineGrid = levelService.lineGrid;
-        //Debug.Log(_levelService.ballsCoordinate);
-        //Debug.Log(lineGrid[(int)balls[0].transform.localPosition.x,(int)balls[0].transform.localPosition.y]);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 
     public void MoveObjectsTo(SwipeDirection swipeDirection)
     {

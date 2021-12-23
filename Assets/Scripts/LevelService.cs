@@ -13,7 +13,7 @@ enum Tile
     Spike = 4,
     Ice = 5,
     Collectable = 6,
-    WhiteBall =7
+    WhiteBall = 7
 }
 
 public class LevelService : MonoBehaviour
@@ -27,7 +27,7 @@ public class LevelService : MonoBehaviour
     public List<Vector3> objCoordinateList;
     public Dictionary<Vector2, GameObject> movableDict = null;
     public Vector3 centerPosition;
-    
+
     public List<Vector2> ballsCoordinate;
     public Vector2 holeCoordinate;
     private string levelText;
@@ -39,15 +39,18 @@ public class LevelService : MonoBehaviour
     {
         GameManager.Instance._coinNumber = 0;
         GameManager.Instance.CoinsLeft = 0;
+        GameManager.Instance.ballList.Clear();
         levelText = GameManager.Instance.CurrentLevel.ToString();
+        
+        //        We need 2 grid system; one for the blocks and one for the movable objects.
         lineGrid = ExportLevel();
         objectGrid = ExportObject();
         GameManager.Instance.gameState = GameState.Start;
-        
+
         float xVal = -objectGrid.GetLength(1) / 2f + .5f;
         float yVal = objectGrid.GetLength(0) / 2f + .5f;
         centerPosition = new Vector3(xVal, yVal, 0);
-        
+
         RenderBlock(lineGrid);
         RenderObject(objectGrid);
         GameManager.Instance._coinNumber = GameManager.Instance.CoinsLeft;
@@ -57,14 +60,10 @@ public class LevelService : MonoBehaviour
 
     private int[,] ExportObject()
     {
-        //recources load all
-        //var levelText = Resources.Load<TextAsset>("Levels/level02").text;
         var lines = levelText.Split("\n"[0]);
         var lineDataWidth = (lines[0].Trim()).Split(";"[0]).Length;
 
         objectGrid = new int[lines.Length - 1, lineDataWidth];
-        //ballsCoordinate= new int[lines.Length-1,lineDataWidth];
-        //_gameController.holeCoordinate= new int[lines.Length-1,lineDataWidth];
         for (int i = 0; i < lines.Length - 1; i++)
         {
             var lineData = (lines[i].Trim()).Split(";"[0]);
@@ -74,24 +73,20 @@ public class LevelService : MonoBehaviour
             }
         }
 
-
         return objectGrid;
     }
 
     private int[,] ExportLevel()
     {
-        //var levelText = Resources.Load<TextAsset>("Levels/level02").text;
         var lines = levelText.Split("\n"[0]);
         var lineDataWidth = (lines[0].Trim()).Split(";"[0]).Length;
         lineGrid = new int[lines.Length - 1, lineDataWidth];
-        //ballsCoordinate= new int[lines.Length-1,lineDataWidth];
-        //_gameController.holeCoordinate= new int[lines.Length-1,lineDataWidth];
         for (int i = 0; i < lines.Length - 1; i++)
         {
             var lineData = (lines[i].Trim()).Split(";"[0]);
             for (int j = 0; j < lineData.Length; j++)
             {
-                if (lineData[j] == "2" || lineData[j] =="3"|| lineData[j] =="7")
+                if (lineData[j] == "2" || lineData[j] == "3" || lineData[j] == "7")
                 {
                     int.TryParse("0", out lineGrid[i, j]);
                 }
@@ -132,10 +127,6 @@ public class LevelService : MonoBehaviour
                 }
             }
         }
-
-        /*
-        transform.position = new Vector3(-levelGrid.GetLength(1) / 2f+.5f, levelGrid.GetLength(0) / 2f+.5f, 0);
-    */
     }
 
     private void RenderObject(int[,] objectGrid)
@@ -145,17 +136,17 @@ public class LevelService : MonoBehaviour
         {
             for (int j = 0; j < objectGrid.GetLength(1); j++)
             {
-                if (objectGrid[i, j] ==(int)Tile.Ball || objectGrid[i, j] == (int)Tile.Hole||
-                    objectGrid[i, j] == (int)Tile.WhiteBall)
+                if (objectGrid[i, j] == (int) Tile.Ball || objectGrid[i, j] == (int) Tile.Hole ||
+                    objectGrid[i, j] == (int) Tile.WhiteBall)
                 {
                     var trnsfrm = transform;
                     Vector3 pos = new Vector3(j, -i, trnsfrm.position.z);
                     var tile = Instantiate(tileList[objectGrid[i, j]], pos, trnsfrm.localRotation, trnsfrm);
                     movableDict.Add(new Vector2(i, j), tile);
-                    SaveObjects(tile,pos);
-                    
+                    SaveObjects(tile, pos);
+
                     //        Send ball objects to GM for win-condition
-                    if (objectGrid[i, j] == (int)Tile.WhiteBall)
+                    if (objectGrid[i, j] == (int) Tile.WhiteBall)
                     {
                         whiteBallID = tile.GetInstanceID();
                     }
@@ -171,18 +162,16 @@ public class LevelService : MonoBehaviour
         //        this if block fixes the hole pipe render to pivot difference
         if (tile.CompareTag("Hole"))
         {
-            secondRenderCamera.pivotDiff = centerPosition - new Vector3(-pos.x,-pos.y,pos.z);
+            secondRenderCamera.pivotDiff = centerPosition - new Vector3(-pos.x, -pos.y, pos.z);
         }
         else
         {
-            GameManager.Instance.ballList.Clear();
             GameManager.Instance.ballList.Add(tile);
         }
-        
+
         gameController.objectList.Add(tile);
-        
     }
-    
+
     // Update is called once per frame
     void Update()
     {
@@ -190,24 +179,6 @@ public class LevelService : MonoBehaviour
         object gameHasEnded = movableObjList.Exists(i => i.CompareTag("Ball")) ? 
             "Game continues." : "Game has ended.";
         Debug.Log(gameHasEnded);
-
-        var movableObjList2 = objList;
-        /*f (objList.Count != 2 &&  !objList.Exists(i=>i.GetInstanceID()==whiteBallID)
-                               && GameManager.Instance.gameState == GameState.Playing)
-        {
-            GameManager.Instance.gameState = GameState.Lose;
-            Debug.Log("game over, wrong ball");
-            return;
-        }*/
-        
-        /*if (!movableObjList.Exists(i => i.CompareTag("Ball"))
-            && GameManager.Instance.gameState == GameState.Playing)
-        {
-            GameManager.Instance.gameState = GameState.Win;
-        }*/
-
-
-        Debug.Log(string.Join(", ", objList));
     }
 
     public (Dictionary<GameObject, Vector3>, List<Vector2>) GetBallPathLength(SwipeDirection swipeDirection)
@@ -215,12 +186,12 @@ public class LevelService : MonoBehaviour
         //        This sends moving objects and their coord to game controller
         Dictionary<GameObject, Vector3> objectDictionary = new Dictionary<GameObject, Vector3>();
         List<Vector2> pathLength = new List<Vector2>();
-        
+
         //        Clear object and coord list for next move
         objCoordinateList.Clear();
-        objList = new List<GameObject>();
+        objList.Clear(); //= new List<GameObject>();
         objList.AddRange(gameController.objectList);
-        
+
         //        objectGrid.GetLength(0) => y-axis / height
         //        objectGrid.GetLength(1) => x-axis / width
         switch (swipeDirection)
@@ -246,7 +217,7 @@ public class LevelService : MonoBehaviour
     {
         //    objectGrid origin => Top left [16,9]
         //    ballPosition origin => Down left (-y)
-        //        Set your moving objects' x position from left to right
+        //        Set your moving objects referencing it's x position from left to right
         IOrderedEnumerable<GameObject> orderBy = objList.OrderByDescending(o => o.transform.localPosition.x);
         objList = orderBy.ToList();
         foreach (var o in objList)
@@ -256,12 +227,17 @@ public class LevelService : MonoBehaviour
             //        Check your right every block.
             for (int i = (int) pos.x; i < objectGrid.GetLength(1); i++)
             {
-                Vector2 newCoord = new Vector2(-pos.y, i);
+                //        When there is hit, this Vector will be new coordinates. 
+                Vector2 newCoord = new Vector2(-pos.y, i);    
+                //        To check next tile in the grid.
                 int nextTile = objectGrid[(int) -pos.y, i + 1];
+                //        To check next position to find if there is object.
                 Vector2 nextPos = new Vector2((int) -pos.y, i + 1);
                 //        Is there any movable object next block?
                 GameObject nextMovable = movableDict.ContainsKey(nextPos) ? movableDict[nextPos] : null;
                 //        If this block is ball:
+                #region Ball
+                
                 if (o.CompareTag("Ball"))
                 {
                     bool hasHit = nextTile == (int) Tile.Wall || nextTile == (int) Tile.Ice;
@@ -282,20 +258,29 @@ public class LevelService : MonoBehaviour
 
                     if (hasHit)
                     {
-                        objectDictionary.Add(o, new Vector3(i+isFall, pos.y, pos.z));
-                        pathLength.Add(new Vector2(-pos.y, i+isFall) - oldCoord);
+                        //        Target coordinate list and object list.
+                        objectDictionary.Add(o, new Vector3(i + isFall, pos.y, pos.z));
+                        //        Calculate the length of the road for animation duration
+                        pathLength.Add(new Vector2(-pos.y, i + isFall) - oldCoord);
                         movableDict.Remove(oldCoord);
-                        CheckIfWhiteExist();
+                        //        İf ball has fallen in the hole, it doesn't have coordinate in movables dictionary.
                         if (isFall == 0)
                         {
                             movableDict[newCoord] = o;
                         }
+
                         break;
                     }
                 }
+
+                #endregion
+
+                #region Hole
+
                 if (o.CompareTag("Hole"))
                 {
-                    bool hasHit = nextTile == (int) Tile.Wall || nextTile == (int) Tile.Ice|| nextTile== (int) Tile.Spike;
+                    bool hasHit = nextTile == (int) Tile.Wall || nextTile == (int) Tile.Ice ||
+                                  nextTile == (int) Tile.Spike;
                     if (nextMovable != null)
                     {
                         if (nextMovable.CompareTag("Ball"))
@@ -309,20 +294,21 @@ public class LevelService : MonoBehaviour
                             hasHit = true;
                         }
                     }
+
                     if (hasHit)
                     {
                         objectDictionary.Add(o, new Vector3(i, pos.y, pos.z));
                         pathLength.Add(newCoord - oldCoord);
                         movableDict.Remove(oldCoord);
-                        CheckIfWhiteExist();
                         movableDict[newCoord] = o;
                         break;
                     }
                 }
+
+                #endregion
             }
         }
     }
-
 
 
     private void SwipeLeft(Dictionary<GameObject, Vector3> objectDictionary, List<Vector2> pathLength)
@@ -363,7 +349,6 @@ public class LevelService : MonoBehaviour
                         objectDictionary.Add(o, new Vector3(i - isFall, pos.y, pos.z));
                         pathLength.Add(new Vector2((int) -pos.y, i - isFall) - oldCoord);
                         movableDict.Remove(oldCoord);
-                        CheckIfWhiteExist();
                         if (isFall == 0)
                         {
                             movableDict[newCoord] = o;
@@ -396,7 +381,6 @@ public class LevelService : MonoBehaviour
                         objectDictionary.Add(o, new Vector3(i, pos.y, pos.z));
                         pathLength.Add(newCoord - oldCoord);
                         movableDict.Remove(oldCoord);
-                        CheckIfWhiteExist();
                         movableDict[newCoord] = o;
                         break;
                     }
@@ -404,6 +388,7 @@ public class LevelService : MonoBehaviour
             }
         }
     }
+
     private void SwipeUp(Dictionary<GameObject, Vector3> objectDictionary, List<Vector2> pathLength)
     {
         IOrderedEnumerable<GameObject> orderBy = objList.OrderByDescending(o => o.transform.localPosition.y);
@@ -413,72 +398,75 @@ public class LevelService : MonoBehaviour
             var pos = o.transform.localPosition;
             Vector2 oldCoord = new Vector2((int) -pos.y, (int) pos.x);
 
-                for (int i = (int) -pos.y; i > 0; i--)
+            for (int i = (int) -pos.y; i > 0; i--)
+            {
+                Vector2 newCoord = new Vector2(i, (int) pos.x);
+                int nextTile = objectGrid[i - 1, (int) pos.x];
+                Vector2 nextPos = new Vector2(i - 1, (int) pos.x);
+                GameObject nextMovable = movableDict.ContainsKey(nextPos) ? movableDict[nextPos] : null;
+                if (o.CompareTag("Ball"))
                 {
-                    Vector2 newCoord = new Vector2(i, (int) pos.x);
-                    int nextTile = objectGrid[i - 1, (int) pos.x];
-                    Vector2 nextPos = new Vector2(i - 1, (int) pos.x);
-                    GameObject nextMovable = movableDict.ContainsKey(nextPos) ? movableDict[nextPos] : null;
-                    if (o.CompareTag("Ball"))
+                    bool hasHit = nextTile == (int) Tile.Wall || nextTile == (int) Tile.Ice;
+                    int isFall = 0;
+                    if (nextMovable != null)
                     {
-                        bool hasHit = nextTile == (int) Tile.Wall || nextTile == (int) Tile.Ice;
-                        int isFall = 0;
-                        if (nextMovable != null)
+                        if (nextMovable.CompareTag("Ball"))
                         {
-                            if (nextMovable.CompareTag("Ball"))
-                            {
-                                hasHit = true;
-                            }
-                            if (nextMovable.CompareTag("Hole"))
-                            {
-                                hasHit = true;
-                                isFall = 1;
-                            }
+                            hasHit = true;
                         }
 
-                        if (hasHit)
+                        if (nextMovable.CompareTag("Hole"))
                         {
-                            objectDictionary.Add(o, new Vector3((int) pos.x, -i+isFall, (int) pos.z));
-                            pathLength.Add(new Vector2(i+isFall, (int) pos.x) - oldCoord);
-                            movableDict.Remove(oldCoord);
-                            CheckIfWhiteExist();
-                            if (isFall == 0)
-                            {
-                                movableDict[newCoord] = o;
-                            }
-                            break;
+                            hasHit = true;
+                            isFall = 1;
                         }
                     }
-                    if (o.CompareTag("Hole"))
-                    {
-                        bool hasHit = nextTile == (int) Tile.Wall || nextTile == (int) Tile.Ice|| nextTile== (int) Tile.Spike;
-                        if (nextMovable != null)
-                        {
-                            if (nextMovable.CompareTag("Ball"))
-                            {
-                                movableDict.Remove(nextPos);
-                                //gameController.EatTheBall(nextMovable);
-                            }
 
-                            if (nextMovable.CompareTag("Hole"))
-                            {
-                                hasHit = true;
-                            }
-                        }
-                        if (hasHit)
+                    if (hasHit)
+                    {
+                        objectDictionary.Add(o, new Vector3((int) pos.x, -i - isFall, (int) pos.z));
+                        pathLength.Add(new Vector2(i + isFall, (int) pos.x) - oldCoord);
+                        movableDict.Remove(oldCoord);
+                        if (isFall == 0)
                         {
-                            objectDictionary.Add(o, new Vector3(pos.x, -i, pos.z));
-                            pathLength.Add(newCoord - oldCoord);
-                            movableDict.Remove(oldCoord);
-                            CheckIfWhiteExist();
                             movableDict[newCoord] = o;
-                            break;
                         }
+
+                        break;
                     }
                 }
-            
+
+                if (o.CompareTag("Hole"))
+                {
+                    bool hasHit = nextTile == (int) Tile.Wall || nextTile == (int) Tile.Ice ||
+                                  nextTile == (int) Tile.Spike;
+                    if (nextMovable != null)
+                    {
+                        if (nextMovable.CompareTag("Ball"))
+                        {
+                            movableDict.Remove(nextPos);
+                            //gameController.EatTheBall(nextMovable);
+                        }
+
+                        if (nextMovable.CompareTag("Hole"))
+                        {
+                            hasHit = true;
+                        }
+                    }
+
+                    if (hasHit)
+                    {
+                        objectDictionary.Add(o, new Vector3(pos.x, -i, pos.z));
+                        pathLength.Add(newCoord - oldCoord);
+                        movableDict.Remove(oldCoord);
+                        movableDict[newCoord] = o;
+                        break;
+                    }
+                }
+            }
         }
     }
+
     private void SwipeDown(Dictionary<GameObject, Vector3> objectDictionary, List<Vector2> pathLength)
     {
         IOrderedEnumerable<GameObject> orderBy = objList.OrderBy(o => o.transform.localPosition.y);
@@ -503,6 +491,7 @@ public class LevelService : MonoBehaviour
                         {
                             hasHit = true;
                         }
+
                         if (nextMovable.CompareTag("Hole"))
                         {
                             hasHit = true;
@@ -512,17 +501,18 @@ public class LevelService : MonoBehaviour
 
                     if (hasHit)
                     {
-                        objectDictionary.Add(o, new Vector3((int) pos.x, -i-isFall, (int) pos.z));
-                        pathLength.Add(new Vector2(i+isFall, (int) pos.x) - oldCoord);
+                        objectDictionary.Add(o, new Vector3((int) pos.x, -i - isFall, (int) pos.z));
+                        pathLength.Add(new Vector2(i + isFall, (int) pos.x) - oldCoord);
                         movableDict.Remove(oldCoord);
-                        CheckIfWhiteExist();
                         if (isFall == 0)
                         {
                             movableDict[newCoord] = o;
                         }
+
                         break;
                     }
                 }
+
                 if (o.CompareTag("Hole"))
                 {
                     bool hasHit = nextTile == (int) Tile.Wall || nextTile == (int) Tile.Ice ||
@@ -546,25 +536,12 @@ public class LevelService : MonoBehaviour
                         objectDictionary.Add(o, new Vector3(pos.x, -i, pos.z));
                         pathLength.Add(newCoord - oldCoord);
                         movableDict.Remove(oldCoord);
-                        CheckIfWhiteExist();
                         movableDict[newCoord] = o;
                         break;
                     }
                 }
             }
-            
         }
     }
     
-    private void CheckIfWhiteExist()
-    {
-        /*var movableObjList = movableDict.Values.ToList();
-        if (movableObjList.Count != 2  &&  !movableObjList.Exists(i=>i.GetInstanceID()==whiteBallID) 
-                                      && GameManager.Instance.gameState == GameState.Playing)
-        {
-            GameManager.Instance.gameState = GameState.Lose;
-            Debug.Log("game over, wrong ball");
-
-        }*/
-    }
 }

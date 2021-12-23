@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 328df0947c36bb143bb875bdd22fa12d,
+    type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -199,9 +200,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57d6c6f50b071b247927921228d2fd12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _levelService: {fileID: 1815438416}
-  gameController: {fileID: 0}
-  touchController: {fileID: 0}
+  _ballList: []
+  _gameState: 0
+  _eatenBall: {fileID: 0}
+  CoinsLeft: 0
+  _coinNumber: 0
+  LevelList: []
+  LevelNumber: 0
+  allowToMove: 1
 --- !u!4 &115474721
 Transform:
   m_ObjectHideFlags: 0
@@ -710,6 +716,7 @@ MonoBehaviour:
   centerPosition: {x: 0, y: 0, z: 0}
   ballsCoordinate: []
   holeCoordinate: {x: 0, y: 0}
+  whiteBallID: 0
 --- !u!4 &1815438418
 Transform:
   m_ObjectHideFlags: 0

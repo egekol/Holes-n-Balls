@@ -16,8 +16,6 @@ public class PlaceRenderCamera : MonoBehaviour
         holePos = _hole.transform.position;
         Debug.Log("FindGameObjectWithTag" + pivotDiff);
         distance = holePos - transform.position-pivotDiff;
-        //var cameraPosition = GetComponent<Camera>().transform;
-        //_camera.transform.position = transform.position + new Vector3(0,0,-15);
     }
 
     // Update is called once per frame

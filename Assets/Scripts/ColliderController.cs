@@ -44,18 +44,7 @@ public class ColliderController : MonoBehaviour
             GameManager.Instance.CoinsLeft--;
         }
     }
-
-    private void CheckIfWhiteExist()
-    {
-        /*var movableObjList = levelService.movableDict.Values.ToList();
-        if (movableObjList.Count != 2
-            && !movableObjList.Exists(i => i.name == "Ball_White(Clone)"))
-        {
-            GameManager.Instance.gameState = GameState.Lose;
-            Debug.Log("game over, wrong ball");
-        }*/
-    }
-
+    
     private void DisableComponents(GameObject o)
     {
         o.GetComponent<MeshRenderer>().enabled = false;
