@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class PlaceRenderCamera : MonoBehaviour
 {
-    [SerializeField] private GameObject _hole;
-
+    private GameObject _hole;
+    private Vector3 holePos;
     private Vector3 distance;
+    public Vector3 pivotDiff;
 
     // Start is called before the first frame update
     void Start()
     {
-        distance = _hole.transform.position - transform.position;
+        _hole = GameObject.FindGameObjectWithTag("Hole");
+        holePos = _hole.transform.position;
+        Debug.Log("FindGameObjectWithTag" + pivotDiff);
+        distance = holePos - transform.position-pivotDiff;
         //var cameraPosition = GetComponent<Camera>().transform;
         //_camera.transform.position = transform.position + new Vector3(0,0,-15);
     }
@@ -19,7 +23,9 @@ public class PlaceRenderCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var newDistance = _hole.transform.position - transform.position;
-        transform.position = transform.position + (distance - newDistance);
+        holePos = _hole.transform.position;
+        var transform1 = transform.position;
+        transform1 = new Vector3(-holePos.x-distance.x,holePos.y-distance.y,transform1.z);
+        transform.position = transform1;
     }
 }

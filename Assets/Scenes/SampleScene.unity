@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 13723384}
   m_Layer: 0
   m_Name: GameController
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -152,9 +152,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1081799bb777bf4fb2c4961fc1f136b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _levelService: {fileID: 1815438417}
-  balls: []
-  hole: []
+  levelService: {fileID: 1815438417}
+  ball: {fileID: 0}
+  objectList: []
+  currentObject: {fileID: 0}
 --- !u!4 &13723385
 Transform:
   m_ObjectHideFlags: 0
@@ -199,6 +200,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _levelService: {fileID: 1815438416}
+  gameController: {fileID: 0}
+  touchController: {fileID: 0}
 --- !u!4 &115474721
 Transform:
   m_ObjectHideFlags: 0
@@ -225,8 +228,9 @@ GameObject:
   - component: {fileID: 273808415}
   - component: {fileID: 273808414}
   - component: {fileID: 273808413}
+  - component: {fileID: 273808416}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: HolePlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -240,7 +244,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 273808411}
   m_LocalRotation: {x: -0, y: 0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: 30.17, y: 1.3100038, z: -27.860003}
+  m_LocalPosition: {x: 32.46, y: 2.2, z: -21.67}
   m_LocalScale: {x: 2.9195373, y: 2.9195373, z: 2.919537}
   m_Children: []
   m_Father: {fileID: 0}
@@ -309,6 +313,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 273808411}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &273808416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273808411}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42eed8a177ea8184a97532d463459dfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pivotDiff: {x: 0, y: 0, z: 0}
 --- !u!1 &545408189
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,8 +338,9 @@ GameObject:
   - component: {fileID: 545408192}
   - component: {fileID: 545408191}
   - component: {fileID: 545408190}
+  - component: {fileID: 545408194}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: RenderCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -350,7 +368,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
-  m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 0
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
@@ -420,12 +437,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 545408189}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 30.27, y: 1.3299994, z: -12.5}
+  m_LocalPosition: {x: 32.17, y: 2.63, z: -10.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &545408194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545408189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42eed8a177ea8184a97532d463459dfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pivotDiff: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -625,7 +655,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
-  m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 0
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
@@ -665,14 +694,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a26481f249027414bac6dcdcfc2403e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameController: {fileID: 13723384}
+  gameController: {fileID: 13723384}
+  secondRenderCamera: {fileID: 545408194}
   tileList:
   - {fileID: 1497375549266368093, guid: a590421316cbcc14fb9a832cbf46ca6e, type: 3}
   - {fileID: 1497375549266368093, guid: c7859071b1a1ba74598c6f474b088360, type: 3}
   - {fileID: 6062421640836757143, guid: 24030815fda443142b80d311ab1b1128, type: 3}
-  - {fileID: 0}
+  - {fileID: 2701107611273970813, guid: 326df0bdbbce4fb449a75f054108e79d, type: 3}
+  - {fileID: 5797668481128616801, guid: c42b94b36c24f96419c7269c812137c8, type: 3}
+  - {fileID: 1497375549266368093, guid: c7859071b1a1ba74598c6f474b088360, type: 3}
+  - {fileID: 9139907905849131115, guid: 3add2211f82adb74ea6d5bbf225ad675, type: 3}
+  - {fileID: 6062421640836757143, guid: 545df165c1689da4bbc016432e24a996, type: 3}
   objList: []
-  objCoordinate: []
+  objCoordinateList: []
+  centerPosition: {x: 0, y: 0, z: 0}
   ballsCoordinate: []
   holeCoordinate: {x: 0, y: 0}
 --- !u!4 &1815438418
